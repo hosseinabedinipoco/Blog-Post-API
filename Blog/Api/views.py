@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Post
 from .serializer import PostSerilizer
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 # Create your views here.
 class create_blog(APIView):
@@ -38,4 +39,12 @@ class get_blog(APIView):
         return Response(serilizer.data, status=status.HTTP_200_OK)
 
 class get_all_blog(APIView):
-    pass
+    def get(self, request):
+        term = request.GET.get('term')
+        if term:
+            posts = Post.objects.filter(Q(title__icontains=term) | Q(category__icontains=term) |
+                                        Q(content__icontains=term))
+        else:
+            posts = Post.objects.all()    
+        serilizer = PostSerilizer(posts, many=True  )
+        return Response(serilizer.data, status=status.HTTP_200_OK)
