@@ -32,7 +32,10 @@ class delete_blog(APIView):
         return Response({'message':'deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 class get_blog(APIView):
-    pass
+    def get(self, request, id):
+        post = get_object_or_404(Post, pk=id)
+        serilizer = PostSerilizer(post)
+        return Response(serilizer.data, status=status.HTTP_200_OK)
 
 class get_all_blog(APIView):
     pass
