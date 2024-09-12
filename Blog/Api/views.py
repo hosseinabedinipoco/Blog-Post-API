@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Post
 from .serializer import PostSerilizer
+from django.shortcuts import get_object_or_404
 # Create your views here.
 class create_blog(APIView):
     def post(self, request):
@@ -15,7 +16,14 @@ class create_blog(APIView):
         return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class update_blog(APIView):
-    pass
+    def put(self, request, id):
+        post = get_object_or_404(Post, pk=id)
+        serilizer = PostSerilizer(post, data = request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response(serilizer.data, status=status.HTTP_200_OK)
+        return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class delete_blog(APIView):
     pass
