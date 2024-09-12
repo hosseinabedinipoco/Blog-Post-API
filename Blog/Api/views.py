@@ -26,7 +26,10 @@ class update_blog(APIView):
 
 
 class delete_blog(APIView):
-    pass
+    def delete(self, request, id):
+        post = get_object_or_404(Post, pk=id)
+        post.delete()
+        return Response({'message':'deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 class get_blog(APIView):
     pass
