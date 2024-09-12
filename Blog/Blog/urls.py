@@ -16,7 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Api import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('create', views.create_blog)
+# router.register('update/<int:id>', views.update_blog)
+# router.register('delete/<int:id>', views.delete_blog)
+# router.register('get/<int:id>', views.get_blog)
+# router.register('get_all', views.get_all_blog)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+] + router.urls
